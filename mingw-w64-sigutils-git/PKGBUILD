@@ -1,9 +1,9 @@
 _realname=sigutils
-pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=0.3.0
+pkgbase=mingw-w64-${_realname}-git
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r599.a243d44
 pkgrel=1
-pkgdesc="Small signal processing utility library  (mingw-w64)"
+pkgdesc="Small signal processing utility library (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64')
 url="https://github.com/BatchDrake/sigutils"
@@ -13,20 +13,26 @@ depends=("${MINGW_PACKAGE_PREFIX}-libsndfile"
          "${MINGW_PACKAGE_PREFIX}-volk")
 makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-cmake"
-             "${MINGW_PACKAGE_PREFIX}-make")
-source=(https://github.com/BatchDrake/sigutils/archive/v${pkgver}/${_realname}-${pkgver}.tar.gz
-        "0001-fix-dll-install-location.patch")
-sha256sums=('f39686bf78d7773f6e0305c27d7b5db7950b96dd40f89eefb307331daf49b0e9'
-            'f01130ccf47656f7b209e45596d470c5af4c8cd0031d3518b9438913c5669694')
+             "${MINGW_PACKAGE_PREFIX}-make"
+             "git")
+source=("${pkgname}::git+https://github.com/BatchDrake/sigutils.git")
+sha256sums=('SKIP')
 
 prepare() {
-  cd "${_realname}-${pkgver}"
+  cd "${pkgname}"
 
-  patch -Np1 -i "${srcdir}"/0001-fix-dll-install-location.patch
+  git submodule init
+  git submodule update
+}
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 build() {
-  cd "${srcdir}"/${_realname}-${pkgver}
+  cd "${pkgname}"
 
   mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
 
@@ -42,7 +48,7 @@ build() {
       -DCMAKE_INSTALL_PREFIX="${MINGW_PREFIX}" \
       "${extra_config[@]}" \
       -G"MinGW Makefiles" \
-      ../${_realname}-${pkgver}
+      ../${pkgname}
 
   "${MINGW_PREFIX}"/bin/cmake.exe --build .
 }
