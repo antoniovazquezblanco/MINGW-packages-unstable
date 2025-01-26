@@ -4,4 +4,6 @@ pkg/
 *.pkg.tar.zst
 
 # Pkg specific
+mingw-w64-sigutils-git/mingw-w64-ucrt-x86_64-sigutils-git/
 mingw-w64-suscan-git/mingw-w64-ucrt-x86_64-suscan-git/
+mingw-w64-suwidgets-git/mingw-w64-ucrt-x86_64-suwidgets-git/
