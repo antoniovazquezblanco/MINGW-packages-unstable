@@ -1,0 +1,58 @@
+_realname=suwidgets
+pkgbase=mingw-w64-${_realname}-git
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r392.7d9ac0a
+pkgrel=1
+pkgdesc="Channel scanner based on sigutils library (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw64' 'ucrt64' 'clang64')
+url="https://github.com/BatchDrake/SuWidgets"
+license=('spdx:GPL-3.0-or-later')
+depends=("${MINGW_PACKAGE_PREFIX}-sigutils-git"
+         "${MINGW_PACKAGE_PREFIX}-fftw"
+         "${MINGW_PACKAGE_PREFIX}-qt6-base")
+makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
+             "${MINGW_PACKAGE_PREFIX}-cmake"
+             "${MINGW_PACKAGE_PREFIX}-make"
+             "git")
+source=("${pkgname}::git+https://github.com/BatchDrake/SuWidgets.git"
+        "001-waterfall.patch"
+        "002-widgets-helpers.patch"
+        "003-linker.patch")
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+prepare() {
+  cd "${pkgname}"
+
+  git submodule init
+  git submodule update
+
+  patch -Np1 -i "${srcdir}"/001-waterfall.patch
+  patch -Np1 -i "${srcdir}"/002-widgets-helpers.patch
+  patch -Np1 -i "${srcdir}"/003-linker.patch
+}
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${pkgname}"
+
+  "${MINGW_PREFIX}"/bin/qmake6 SuWidgetsLib.pro
+
+  make PREFIX="${MINGW_PREFIX}" -j1
+}
+
+package() {
+  cd "${pkgname}"
+
+  # Fix Makefiles
+  local PREFIX_WIN=$(cygpath -am ${MINGW_PREFIX})
+  find . -type f \( -name 'Makefile*' \) -exec sed -i -e "s|${PREFIX_WIN:0:2}\$(INSTALL_ROOT|\$(INSTALL_ROOT|g" {} \;
+  find . -type f \( -name 'Makefile*' \) -exec sed -i -e "s|)${PREFIX_WIN:2}|)${MINGW_PREFIX}|g" {} \;
+
+  make INSTALL_ROOT="${pkgdir}" install
+}
