@@ -11,7 +11,8 @@ license=('spdx:GPL-3.0-or-later')
 depends=("${MINGW_PACKAGE_PREFIX}-qt6-base"
          "${MINGW_PACKAGE_PREFIX}-sigutils-git"
          "${MINGW_PACKAGE_PREFIX}-suscan-git"
-         "${MINGW_PACKAGE_PREFIX}-suwidgets-git")
+         "${MINGW_PACKAGE_PREFIX}-suwidgets-git"
+         "${MINGW_PACKAGE_PREFIX}-portaudio")
 makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-cmake"
              "${MINGW_PACKAGE_PREFIX}-make"
