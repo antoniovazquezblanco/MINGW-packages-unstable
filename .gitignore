@@ -6,5 +6,6 @@ pkg/
 # Pkg specific
 mingw-w64-hackrf-git/mingw-w64-ucrt-x86_64-hackrf-git/
 mingw-w64-sigutils-git/mingw-w64-ucrt-x86_64-sigutils-git/
+mingw-w64-soapyhackrf-git/mingw-w64-ucrt-x86_64-soapyrhackrf-git/
 mingw-w64-suscan-git/mingw-w64-ucrt-x86_64-suscan-git/
 mingw-w64-suwidgets-git/mingw-w64-ucrt-x86_64-suwidgets-git/
