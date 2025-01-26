@@ -64,4 +64,8 @@ package() {
   cd "${srcdir}/build-${MSYSTEM}"
 
   DESTDIR="${pkgdir}" "${MINGW_PREFIX}"/bin/cmake.exe --install .
+
+  # Fix dll location
+  mkdir -p "${pkgdir}${MINGW_PREFIX}/bin/"
+  mv "${pkgdir}${MINGW_PREFIX}/lib/"*.dll "${pkgdir}${MINGW_PREFIX}/bin/"
 }

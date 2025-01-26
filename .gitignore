@@ -1,3 +1,7 @@
+# General
 src/
 pkg/
 *.pkg.tar.zst
+
+# Pkg specific
+mingw-w64-suscan-git/mingw-w64-ucrt-x86_64-suscan-git/
