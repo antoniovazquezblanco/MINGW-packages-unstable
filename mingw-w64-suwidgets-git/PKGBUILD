@@ -55,4 +55,8 @@ package() {
   find . -type f \( -name 'Makefile*' \) -exec sed -i -e "s|)${PREFIX_WIN:2}|)${MINGW_PREFIX}|g" {} \;
 
   make INSTALL_ROOT="${pkgdir}" install
+
+  # Fix dll location
+  mkdir -p "${pkgdir}${MINGW_PREFIX}/bin/"
+  mv "${pkgdir}${MINGW_PREFIX}/lib/"*.dll "${pkgdir}${MINGW_PREFIX}/bin/"
 }
