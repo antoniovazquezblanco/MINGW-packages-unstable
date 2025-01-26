@@ -1,0 +1,11 @@
+--- mingw-w64-ucrt-x86_64-sigdigger-git/App/Application.cpp	2025-01-26 17:59:49.924370700 +0100
++++ mingw-w64-ucrt-x86_64-sigdigger-git/App/Application.cpp	2025-01-26 18:01:37.068235300 +0100
+@@ -372,7 +372,7 @@
+           "limitation (or even feel like helping me out addressing it), please "
+           "feel free to e-mail me at BatchDrake@gmail.com",
+           QMessageBox::Ok);
+-    mediator->refreshUI();
++    m_mediator->refreshUI();
+     return;
+   }
+ #endif // _WIN32

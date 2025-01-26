@@ -1,0 +1,67 @@
+_realname=sigdigger
+pkgbase=mingw-w64-${_realname}-git
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r1175.bc485eb
+pkgrel=1
+pkgdesc="Qt-based digital signal analyzer, using Suscan core and Sigutils DSP library (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw64' 'ucrt64' 'clang64')
+url="https://github.com/BatchDrake/SigDigger"
+license=('spdx:GPL-3.0-or-later')
+depends=("${MINGW_PACKAGE_PREFIX}-qt6-base"
+         "${MINGW_PACKAGE_PREFIX}-sigutils-git"
+         "${MINGW_PACKAGE_PREFIX}-suscan-git"
+         "${MINGW_PACKAGE_PREFIX}-suwidgets-git")
+makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
+             "${MINGW_PACKAGE_PREFIX}-cmake"
+             "${MINGW_PACKAGE_PREFIX}-make"
+             "${MINGW_PACKAGE_PREFIX}-qt6-tools"
+             "git")
+source=("${pkgname}::git+https://github.com/BatchDrake/SigDigger.git"
+        "001-qmake.patch"
+        "002-application.patch"
+        "003-time.patch")
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+prepare() {
+  cd "${pkgname}"
+
+  git submodule init
+  git submodule update
+
+  patch -Np1 -i "${srcdir}"/001-qmake.patch
+  patch -Np1 -i "${srcdir}"/002-application.patch
+  patch -Np1 -i "${srcdir}"/003-time.patch
+}
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${pkgname}"
+
+  MSYS2_ARG_CONV_EXCL="PREFIX=" \
+  "${MINGW_PREFIX}"/bin/qmake6 \
+    PREFIX=${MINGW_PREFIX} \
+    CONFIG+=${qmake_config} \
+    SigDigger.pro
+
+  # Fix Makefiles
+  find . -type f \( -name 'Makefile*' \) -exec sed -i -e "s|lrelease.exe|lrelease-qt6.exe|g" {} \;
+
+  make PREFIX="${MINGW_PREFIX}" -j1
+}
+
+package() {
+ cd "${pkgname}"
+
+  # Fix Makefiles
+  local PREFIX_WIN=$(cygpath -am ${MINGW_PREFIX})
+  find . -type f \( -name 'Makefile*' \) -exec sed -i -e "s|${PREFIX_WIN:0:2}\$(INSTALL_ROOT|\$(INSTALL_ROOT|g" {} \;
+  find . -type f \( -name 'Makefile*' \) -exec sed -i -e "s|)${PREFIX_WIN:2}|)${MINGW_PREFIX}|g" {} \;
+
+  make INSTALL_ROOT="${pkgdir}" install
+}

@@ -1,0 +1,17 @@
+--- mingw-w64-ucrt-x86_64-sigdigger-git/Default/SourceTimeWidget/SourceTimeWidget.cpp	2025-01-26 18:28:28.126697900 +0100
++++ mingw-w64-ucrt-x86_64-sigdigger-git/Default/SourceTimeWidget/SourceTimeWidget.cpp	2025-01-26 18:37:26.234016400 +0100
+@@ -48,10 +48,10 @@
+ {
+   struct tm tm;
+ 
+-  if (m_utc)
+-    gmtime_r(&m_ts.tv_sec, &tm);
+-  else
+-    localtime_r(&m_ts.tv_sec, &tm);
++  //if (m_utc)
++  //  gmtime_r(&m_ts.tv_sec, &tm);
++  //else
++  //  localtime_r(&m_ts.tv_sec, &tm);
+ 
+   ui->hourLCD->setValue(tm.tm_hour);
+   ui->minLCD->setValue(tm.tm_min);
