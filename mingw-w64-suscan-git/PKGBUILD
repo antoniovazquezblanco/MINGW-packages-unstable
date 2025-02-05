@@ -1,7 +1,7 @@
 _realname=suscan
 pkgbase=mingw-w64-${_realname}-git
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
-pkgver=r1243.b396020
+pkgver=r1246.39aca1a
 pkgrel=1
 pkgdesc="Channel scanner based on sigutils library (mingw-w64)"
 arch=('any')
@@ -20,18 +20,14 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-cmake"
              "${MINGW_PACKAGE_PREFIX}-make"
              "git")
-source=("${pkgname}::git+https://github.com/BatchDrake/suscan.git"
-        "001-soapy-include.patch")
-sha256sums=('SKIP'
-            'SKIP')
+source=("${pkgname}::git+https://github.com/BatchDrake/suscan.git")
+sha256sums=('SKIP')
 
 prepare() {
   cd "${pkgname}"
 
   git submodule init
   git submodule update
-
-  patch -Np1 -i "${srcdir}"/001-soapy-include.patch
 }
 
 pkgver() {
