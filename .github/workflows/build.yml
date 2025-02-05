@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: Install MSYS2
       uses: msys2/setup-msys2@v2
+      with:
+        install: base-devel
 
     - name: Configure Git to use LF
       shell: pwsh
