@@ -1,0 +1,24 @@
+name: Build Package
+description: 'Build an MSYS2 package from source.'
+
+inputs:
+  shell:
+    required: false
+    default: msys2 {0}
+  pkg_name:
+    required: true
+  pkg_install:
+    required: false
+    default: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Build
+    shell:  ${{inputs.shell}}
+    run: cd ${{inputs.pkg_name}} && makepkg-mingw --cleanbuild --syncdeps --force --noconfirm
+
+  - name: Install
+    shell:  ${{inputs.shell}}
+    if: ${{inputs.pkg_install}}
+    run: cd ${{inputs.pkg_name}} && makepkg-mingw --force --noconfirm --install

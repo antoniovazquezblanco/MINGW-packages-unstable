@@ -1,0 +1,39 @@
+name: Build
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - name: Install MSYS2
+      uses: msys2/setup-msys2@v2
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: 0
+
+    - name: Build Sigutils
+      uses: "./.github/actions/build_pkg"
+      with:
+        pkg_name: mingw-w64-sigutils-git
+
+    - name: Build Suscan
+      uses: "./.github/actions/build_pkg"
+      with:
+        pkg_name: mingw-w64-suscan-git
+
+    - name: Build Suwidgets
+      uses: "./.github/actions/build_pkg"
+      with:
+        pkg_name: mingw-w64-suwidgets-git
+
+    - name: Build Sigdigger
+      uses: "./.github/actions/build_pkg"
+      with:
+        pkg_name: mingw-w64-sigdigger-git
