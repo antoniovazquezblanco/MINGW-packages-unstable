@@ -1,7 +1,7 @@
 _realname=sigdigger
 pkgbase=mingw-w64-${_realname}-git
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
-pkgver=r1175.bc485eb
+pkgver=r1214.29b2fcd
 pkgrel=1
 pkgdesc="Qt-based digital signal analyzer, using Suscan core and Sigutils DSP library (mingw-w64)"
 arch=('any')
@@ -20,21 +20,14 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-make"
              "${MINGW_PACKAGE_PREFIX}-qt6-tools"
              "git")
-source=("${pkgname}::git+https://github.com/BatchDrake/SigDigger.git"
-        "001-qmake.patch"
-        "002-application.patch"
-        "003-time.patch")
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
+source=("${pkgname}::git+https://github.com/BatchDrake/SigDigger.git")
+sha256sums=('SKIP')
 
 prepare() {
   cd "${pkgname}"
 
   git submodule init
   git submodule update
-
-  patch -Np1 -i "${srcdir}"/001-qmake.patch
-  patch -Np1 -i "${srcdir}"/002-application.patch
-  patch -Np1 -i "${srcdir}"/003-time.patch
 }
 
 pkgver() {
