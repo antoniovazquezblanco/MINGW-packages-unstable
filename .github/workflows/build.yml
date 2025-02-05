@@ -11,10 +11,9 @@ jobs:
     steps:
     - name: Install MSYS2
       uses: msys2/setup-msys2@v2
-      with:
-        install: git
 
     - name: Configure Git to use LF
+      shell: pwsh
       run: |
         git config --global core.autocrlf false
         git config --global core.eol lf
