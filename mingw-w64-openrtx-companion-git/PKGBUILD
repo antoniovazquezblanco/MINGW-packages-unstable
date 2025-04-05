@@ -19,7 +19,7 @@ sha256sums=('SKIP')
 prepare() {
   cd "${pkgname}"
 
-  "${MINGW_PREFIX}"/bin/cargo fetch
+  cargo fetch
 }
 
 pkgver() {
