@@ -1,0 +1,64 @@
+_realname=radio_tool
+pkgbase=mingw-w64-${_realname}-git
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r133.a1108b5
+pkgrel=1
+pkgdesc="Radio firmware tool"
+arch=('any')
+provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+mingw_arch=('mingw64' 'ucrt64' 'clang64')
+url="https://github.com/v0l/radio_tool"
+license=('spdx:GPL-3.0-or-later')
+depends=("${MINGW_PACKAGE_PREFIX}-libusb")
+makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
+             "${MINGW_PACKAGE_PREFIX}-cmake"
+             "${MINGW_PACKAGE_PREFIX}-ninja"
+             "git")
+source=("${pkgname}::git+https://github.com/v0l/radio_tool.git"
+        "00_findlibusb.patch"
+        "01_cmake.patch")
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+prepare() {
+  cd "${pkgname}"
+
+  patch -Np1 -i "${srcdir}"/00_findlibusb.patch
+  patch -Np1 -i "${srcdir}"/01_cmake.patch
+}
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${pkgname}"
+
+  mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
+
+  declare -a extra_config
+  if check_option "debug" "n"; then
+    extra_config+=("-DCMAKE_BUILD_TYPE=Release")
+  else
+    extra_config+=("-DCMAKE_BUILD_TYPE=Debug")
+  fi
+
+  MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
+    "${MINGW_PREFIX}"/bin/cmake.exe \
+      -DCMAKE_INSTALL_PREFIX="${MINGW_PREFIX}" \
+      "${extra_config[@]}" \
+      -G"Ninja" \
+      ../${pkgname}
+
+  "${MINGW_PREFIX}"/bin/cmake.exe --build .
+}
+
+package() {
+  cd "${srcdir}/build-${MSYSTEM}"
+
+  DESTDIR="${pkgdir}" "${MINGW_PREFIX}"/bin/cmake.exe --install .
+}

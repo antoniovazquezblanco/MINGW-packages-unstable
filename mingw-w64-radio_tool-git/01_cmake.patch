@@ -1,0 +1,11 @@
+--- mingw-w64-ucrt-x86_64-radio_tool-git/CMakeLists.txt	2025-04-05 13:45:36.888749900 +0200
++++ mingw-w64-ucrt-x86_64-radio_tool-git/CMakeLists.txt	2025-04-05 13:44:53.720926400 +0200
+@@ -55,7 +55,7 @@
+     src/usb_radio_factory.cpp
+     src/serial_radio_factory.cpp
+     src/tyt_radio.cpp
+-    src/ymodem_device.cpp
++    #src/ymodem_device.cpp
+     src/tyt_dfu.cpp
+     src/tyt_fw.cpp
+     src/tyt_fw_sgl.cpp
