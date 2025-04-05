@@ -1,0 +1,45 @@
+_realname=dmrconfig
+pkgbase="mingw-w64-${_realname}-git"
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r256.c42aba0
+pkgrel=1
+pkgdesc="Configuration utility for DMR radios"
+arch=('any')
+provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+mingw_arch=('mingw64' 'ucrt64' 'clang64')
+url="https://github.com/OpenRTX/dmrconfig"
+license=('spdx:BSD-3-Clause')
+depends=("libbsd"
+         "${MINGW_PACKAGE_PREFIX}-libusb")
+makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
+             "${MINGW_PACKAGE_PREFIX}-make"
+             "git")
+source=("${pkgname}::git+https://github.com/OpenRTX/dmrconfig.git")
+        #"00_radio.patch")
+sha256sums=('SKIP')
+            #'SKIP')
+
+prepare() {
+  cd "${pkgname}"
+
+  #patch -Np1 -i "${srcdir}"/00_radio.patch
+}
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${pkgname}"
+
+  make
+}
+
+package() {
+  cd "${pkgname}"
+
+  DESTDIR="${pkgdir}" make install
+}
