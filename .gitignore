@@ -4,6 +4,7 @@ pkg/
 *.pkg.tar.zst
 
 # Pkg specific
+mingw-w64-openrtx-companion-git/mingw-w64-ucrt-x86_64-openrtx-companion-git/
 mingw-w64-sigdigger-git/mingw-w64-ucrt-x86_64-sigdigger-git/
 mingw-w64-sigutils-git/mingw-w64-ucrt-x86_64-sigutils-git/
 mingw-w64-suscan-git/mingw-w64-ucrt-x86_64-suscan-git/

@@ -1,0 +1,46 @@
+_realname=openrtx-companion
+pkgbase=mingw-w64-${_realname}-git
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r25.92faf73
+pkgrel=1
+pkgdesc="GUI application to install and manage OpenRTX on ham radios (mingw-w64)"
+arch=('any')
+provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+mingw_arch=('mingw64' 'ucrt64' 'clang64')
+url="https://github.com/OpenRTX/OpenRTX-Companion"
+license=('spdx:GPL-3.0-or-later')
+#depends=("${MINGW_PACKAGE_PREFIX}-rust")
+makedepends=("${MINGW_PACKAGE_PREFIX}-rust"
+             "git")
+source=("${pkgname}::git+https://github.com/OpenRTX/OpenRTX-Companion.git")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "${pkgname}"
+
+  "${MINGW_PREFIX}"/bin/cargo fetch
+}
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${pkgname}"
+
+  cargo build --release --frozen
+}
+
+package() {
+  cd "${pkgname}"
+
+  cargo install \
+    --offline \
+    --no-track \
+    --frozen \
+    --path . \
+    --root "${pkgdir}${MINGW_PREFIX}"
+}
