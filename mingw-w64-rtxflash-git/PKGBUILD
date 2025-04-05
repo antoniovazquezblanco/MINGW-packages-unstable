@@ -1,0 +1,45 @@
+_realname=rtxflash
+pkgbase=mingw-w64-${_realname}-git
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r17.5f6f1e8
+pkgrel=1
+pkgdesc="Rust library to flash ham radios for OpenRTX, paired with a minimal CLI interface (mingw-w64)"
+arch=('any')
+provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+mingw_arch=('mingw64' 'ucrt64' 'clang64')
+url="https://github.com/OpenRTX/rtxflash"
+license=('spdx:GPL-3.0-or-later')
+makedepends=("${MINGW_PACKAGE_PREFIX}-rust"
+             "git")
+source=("${pkgname}::git+https://github.com/OpenRTX/rtxflash.git")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "${pkgname}"
+
+  cargo fetch
+}
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${pkgname}"
+
+  cargo build --release --frozen
+}
+
+package() {
+  cd "${pkgname}"
+
+  cargo install \
+    --offline \
+    --no-track \
+    --frozen \
+    --path . \
+    --root "${pkgdir}${MINGW_PREFIX}"
+}
