@@ -1,7 +1,7 @@
 _realname=suwidgets
 pkgbase=mingw-w64-${_realname}-git
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
-pkgver=r397.866bd83
+pkgver=r400.9e01f1d
 pkgrel=1
 pkgdesc="Channel scanner based on sigutils library (mingw-w64)"
 arch=('any')
