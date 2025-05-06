@@ -31,6 +31,11 @@ jobs:
       with:
         pkg_name: mingw-w64-openrtx-companion-git
 
+    - name: Build rtl_433
+      uses: "./.github/actions/build_pkg"
+      with:
+        pkg_name: mingw-w64-rtl_433-git
+
     - name: Build rtxflash
       uses: "./.github/actions/build_pkg"
       with:

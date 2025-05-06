@@ -1,0 +1,54 @@
+_realname=rtl_433
+pkgbase=mingw-w64-${_realname}-git
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
+pkgver=r3641.04a746ea
+pkgrel=1
+pkgdesc="Program to decode radio transmissions from devices on the ISM bands (mingw-w64)"
+arch=('any')
+provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+mingw_arch=('mingw64' 'ucrt64' 'clang64')
+url="https://github.com/merbanan/rtl_433"
+license=('spdx:GPL-2.0-or-later')
+depends=("${MINGW_PACKAGE_PREFIX}-soapysdr"
+         "${MINGW_PACKAGE_PREFIX}-libusb")
+makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
+             "${MINGW_PACKAGE_PREFIX}-cmake"
+             "${MINGW_PACKAGE_PREFIX}-ninja"
+             "git")
+source=("${pkgname}::git+${url}.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "${pkgname}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${pkgname}"
+
+  mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
+
+  declare -a extra_config
+  if check_option "debug" "n"; then
+    extra_config+=("-DCMAKE_BUILD_TYPE=Release")
+  else
+    extra_config+=("-DCMAKE_BUILD_TYPE=Debug")
+  fi
+
+  MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
+    "${MINGW_PREFIX}"/bin/cmake.exe \
+      -DCMAKE_INSTALL_PREFIX="${MINGW_PREFIX}" \
+      "${extra_config[@]}" \
+      -G"Ninja" \
+      ../${pkgname}
+
+  "${MINGW_PREFIX}"/bin/cmake.exe --build .
+}
+
+package() {
+  cd "${srcdir}/build-${MSYSTEM}"
+
+  DESTDIR="${pkgdir}" "${MINGW_PREFIX}"/bin/cmake.exe --install .
+}
