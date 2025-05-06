@@ -10,6 +10,8 @@ conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 mingw_arch=('mingw64' 'ucrt64' 'clang64')
 url="https://github.com/OpenRTX/rtxflash"
 license=('spdx:GPL-3.0-or-later')
+provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 makedepends=("${MINGW_PACKAGE_PREFIX}-rust"
              "git")
 source=("${pkgname}::git+https://github.com/OpenRTX/rtxflash.git")
