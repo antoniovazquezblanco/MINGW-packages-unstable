@@ -11,6 +11,7 @@ mingw_arch=('mingw64' 'ucrt64' 'clang64')
 url="https://github.com/merbanan/rtl_433"
 license=('spdx:GPL-2.0-or-later')
 depends=("${MINGW_PACKAGE_PREFIX}-soapysdr"
+         "${MINGW_PACKAGE_PREFIX}-rtl-sdr"
          "${MINGW_PACKAGE_PREFIX}-libusb")
 makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-cmake"
