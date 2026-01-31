@@ -1,7 +1,7 @@
 _realname=sigutils
 pkgbase=mingw-w64-${_realname}-git
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
-pkgver=r600.6caa6d2
+pkgver=r601.ca7e195
 pkgrel=1
 pkgdesc="Small signal processing utility library (mingw-w64)"
 arch=('any')
