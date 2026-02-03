@@ -1,0 +1,15 @@
+diff --git a/include/Suscan/Plugin.h b/include/Suscan/Plugin.h
+index 1eb0496..a099ccf 100644
+--- a/include/Suscan/Plugin.h
++++ b/include/Suscan/Plugin.h
+@@ -23,7 +23,11 @@
+ #include <sigutils/util/util.h>
+ #include <sigutils/version.h>
+-#include <suscan/plugin.h>
++#if defined(__GNUC__)
++# include_next <suscan/plugin.h>
++#else
++# include <suscan/plugin.h>
++#endif
+ 
+ #include <QSet>
