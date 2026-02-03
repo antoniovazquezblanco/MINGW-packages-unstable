@@ -1,7 +1,7 @@
 _realname=suscan
 pkgbase=mingw-w64-${_realname}-git
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
-pkgver=r1246.39aca1a
+pkgver=r1275.8bac882
 pkgrel=1
 pkgdesc="Channel scanner based on sigutils library (mingw-w64)"
 arch=('any')
@@ -20,14 +20,24 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-cmake"
              "${MINGW_PACKAGE_PREFIX}-make"
              "git")
-source=("${pkgname}::git+https://github.com/BatchDrake/suscan.git")
-sha256sums=('SKIP')
+source=("${pkgname}::git+https://github.com/BatchDrake/suscan.git"
+        "00-win32.patch"
+        "01-cmake.patch"
+        "02-spectrum.patch")
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP')
 
 prepare() {
   cd "${pkgname}"
 
   git submodule init
   git submodule update
+
+  patch -p1 < "../00-win32.patch"
+  patch -p1 < "../01-cmake.patch"
+  patch -p1 < "../02-spectrum.patch"
 }
 
 pkgver() {
@@ -64,6 +74,8 @@ package() {
   DESTDIR="${pkgdir}" "${MINGW_PREFIX}"/bin/cmake.exe --install .
 
   # Fix dll location
-  mkdir -p "${pkgdir}${MINGW_PREFIX}/bin/"
-  mv "${pkgdir}${MINGW_PREFIX}/lib/"*.dll "${pkgdir}${MINGW_PREFIX}/bin/"
+  mingw_rel="${MINGW_PREFIX#?:}"
+  mingw_rel="${mingw_rel#/}"
+  mkdir -p "${pkgdir}/${mingw_rel}/bin/"
+  mv "${pkgdir}/${mingw_rel}/lib/"*.dll "${pkgdir}/${mingw_rel}/bin/"
 }
