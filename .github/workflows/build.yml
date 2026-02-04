@@ -26,6 +26,11 @@ jobs:
         submodules: true
         fetch-depth: 0
 
+    - name: Build rtxflash
+      uses: "./.github/actions/build_pkg"
+      with:
+        pkg_name: mingw-w64-rtxflash-git
+
     - name: Build OpenRTX Companion
       uses: "./.github/actions/build_pkg"
       with:
@@ -35,11 +40,6 @@ jobs:
       uses: "./.github/actions/build_pkg"
       with:
         pkg_name: mingw-w64-rtl_433-git
-
-    - name: Build rtxflash
-      uses: "./.github/actions/build_pkg"
-      with:
-        pkg_name: mingw-w64-rtxflash-git
 
     - name: Build Sigutils
       uses: "./.github/actions/build_pkg"
